@@ -10,26 +10,16 @@ def lambda_handler(event, context):
     client.connect("some_endpoint_address.compute.amazonaws.com", 1883, 60)
     
     internal_temp=event['decoding_output']['TransformedPayloadData']['temperature_internal']
-    battery_val=event['decoding_output']['TransformedPayloadData']['battery_value']
-    humidity=event['decoding_output']['TransformedPayloadData']['humidity']
-    battery_status=event['decoding_output']['TransformedPayloadData']['battery_status']
     
     
-    #a84041d55182720b
-    #a84041d8118388cc
-    #a840419e71837d77
-    #a8404164718388cd
-    #a840416c118388ce
-    #a8404198618319a2
-    
-    dev_eui=event['decoding_output']['LNSData']['WirelessMetadata']['LoRaWAN']['DevEui']
+    dev_ID=event['decoding_output']['LNSData']['WirelessMetadata']['DevID']
     
     
 
     # Publish the data to the specified topic
     topic = "v1/devices/telemetry"
-    pld = '{"internal_temperature_' + dev_eui + '": ' + str((internal_temp)) + '}'
-    #pld = '{"temperature": "877", "humidity": "55"}' 
+    pld = '{"internal_temperature_' + dev_ID + '": ' + str((internal_temp)) + '}'
+
     client.publish(topic, pld, qos=1, retain=True)
     print(str(pld))
 
